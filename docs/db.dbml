@@ -1,0 +1,128 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Address: Holds address information for customers.
+Customer: Stores information about each customer, including balance and credit limit.
+Category: Categorizes products for better organization.
+Department: Organizes employees into departments.
+Employee: Represents employees managing orders and customer service.
+Employment: Links employees to departments.
+Inventory: Manages inventory details, tracking stock levels for each product.
+Product: Stores products with their unit prices.
+Item: Contains details about each item in an order, such as quantity and unit price.
+Order: Represents customer orders containing multiple items, including an optional notes field.
+OrderProductAssociation: missing (requires genai creation)
+Payment: Records payment transactions for orders.
+ProductCategory: Links products to categories.
+Supplier: Represents suppliers providing products.
+'''
+}
+
+Table Address {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    street VARCHAR 
+    city VARCHAR 
+    postal_code VARCHAR 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    balance FLOAT 
+    credit_limit FLOAT 
+    }
+
+Table Category {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+Table Department {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+Table Employee {
+    id INTEGER [primary key]
+    name VARCHAR 
+    position VARCHAR 
+    }
+
+Table Employment {
+    id INTEGER [primary key]
+    employee_id INTEGER 
+    department_id INTEGER 
+    }
+
+Table Inventory {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    quantity_in_stock INTEGER 
+    }
+
+Table Product {
+    id INTEGER [primary key]
+    name VARCHAR 
+    unit_price FLOAT 
+    }
+
+Table Item {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    product_id INTEGER 
+    quantity INTEGER 
+    unit_price FLOAT 
+    amount FLOAT 
+    }
+
+Table Order {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    date_shipped DATETIME 
+    notes VARCHAR 
+    amount_total FLOAT 
+    }
+
+Table OrderProductAssociation {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    product_id INTEGER 
+    }
+
+Table Payment {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    amount FLOAT 
+    date DATETIME 
+    }
+
+Table ProductCategory {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    category_id INTEGER 
+    }
+
+Table Supplier {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+
+
+// Relationships
+    Ref: Address.(customer_id) < Customer.(id)
+    Ref: Employment.(department_id) < Department.(id)
+    Ref: Employment.(employee_id) < Employee.(id)
+    Ref: Inventory.(product_id) < Product.(id)
+    Ref: Item.(order_id) < Order.(id)
+    Ref: Item.(product_id) < Product.(id)
+    Ref: Order.(customer_id) < Customer.(id)
+    Ref: OrderProductAssociation.(order_id) < Order.(id)
+    Ref: OrderProductAssociation.(product_id) < Product.(id)
+    Ref: Payment.(order_id) < Order.(id)
+    Ref: ProductCategory.(category_id) < Category.(id)
+    Ref: ProductCategory.(product_id) < Product.(id)
